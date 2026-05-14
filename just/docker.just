@@ -19,59 +19,59 @@ compose-restart:
 
 # Print compose service logs
 compose-logs *args:
-    -docker compose logs {{args}}
+    @-docker compose logs {{args}}
 
 # Open interactive shell inside edge-trust container
 exec-edge-trust-it:
-    docker compose exec -it edge-trust sh
+    @docker compose exec -it edge-trust sh
 
 # Execute commands inside edge-trust container
 exec-edge-trust-cmd +args:
-    docker compose exec edge-trust sh -ceu '{{args}}'
+    @docker compose exec edge-trust sh -ceu '{{args}}'
 
 # Open interactive shell inside cfmock container
 exec-cfmock-it:
-    docker compose exec -it cfmock sh
+    @docker compose exec -it cfmock sh
 
 # Execute commands inside cfmock container
 exec-cfmock-cmd +args:
-    docker compose exec cfmock sh -ceu '{{args}}'
+    @docker compose exec cfmock sh -ceu '{{args}}'
 
 # Randomize mock Cloudflare CIDRs
 randomize-cidrs:
-    just exec-cfmock-cmd cfmock random
+    @just exec-cfmock-cmd cfmock random
 
 # Clear all mock Cloudflare CIDRs
 clear-cidrs:
-    just exec-cfmock-cmd cfmock clear
+    @just exec-cfmock-cmd cfmock clear
 
 # Delete mock Cloudflare API response
 delete-response:
-    just exec-cfmock-cmd cfmock delete
+    @just exec-cfmock-cmd cfmock delete
 
 # Set mock Cloudflare IPv4 CIDRs
 set-ipv4 *args:
-    just exec-cfmock-cmd IPV4_CIDRS='{{args}}' cfmock set
+    @just exec-cfmock-cmd IPV4_CIDRS='{{args}}' cfmock set
 
 # Set mock Cloudflare IPv6 CIDRs
 set-ipv6 *args:
-    just exec-cfmock-cmd IPV6_CIDRS='{{args}}' cfmock set
+    @just exec-cfmock-cmd IPV6_CIDRS='{{args}}' cfmock set
 
 # Set mock Cloudflare ETag
 set-etag *args:
-    just exec-cfmock-cmd ETAG='{{args}}' cfmock set
+    @just exec-cfmock-cmd ETAG='{{args}}' cfmock set
 
 # Print generated trusted proxy config
 show-trusted-proxies:
-    just exec-edge-trust-cmd \
+    @just exec-edge-trust-cmd \
     cat /etc/nginx/dynamic/trusted-proxy-sources.conf
 
 # Print generated origin allowlist config
 show-origin-allowlist:
-    just exec-edge-trust-cmd \
+    @just exec-edge-trust-cmd \
     cat /etc/nginx/dynamic/origin-allowlist.conf
 
 # Print persisted reconciliation state
 show-state:
-    just exec-edge-trust-cmd \
+    @just exec-edge-trust-cmd \
     cat /var/lib/edge-trust/state.json
