@@ -22,6 +22,50 @@ On each update cycle it:
 If an update fails, the last known good state and generated configuration
 are preserved until the next successful reconciliation cycle.
 
+## Development
+
+### Requirements
+
+- [Go](https://go.dev/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Just](https://github.com/casey/just)
+
+### Quick Start
+
+```bash
+# build and start dev stack:
+just compose-up
+
+# inspect generated files:
+just inspect
+
+# tear down dev stack
+just compose-down
+```
+
+### Testing
+
+Run unit tests:
+
+```bash
+just test
+```
+
+Start dev stack and modify mock Cloudflare API responses:
+
+```bash
+just compose-up
+just randomize-cidrs
+just set-etag <sample-etag>
+```
+
+Inspect generated configuration files and persisted state:
+
+```bash
+just inspect
+```
+
 ## Nginx Configuration
 
 ### Origin Allowlist
