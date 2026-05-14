@@ -1,0 +1,39 @@
+services:
+  cfmock:
+    build:
+      context: .
+      dockerfile: docker/cfmock/Dockerfile
+    container_name: cfmock
+    image: senthora/cfmock:dev
+    tmpfs:
+      - /usr/share/nginx/html
+    restart: unless-stopped
+
+  edge-trust:
+    build: .
+    image: senthora/edge-trust:dev
+    container_name: edge-trust
+    volumes:
+      - nginx-dynamic:/etc/nginx/dynamic:rw
+      - nginx-signal:/signal:rw
+    # noinspection HttpUrlsUsage
+    environment:
+      - CF_API_URL=http://cfmock/client/v4/ips
+      - STATE_JSON_PATH=/var/lib/edge-trust/state.json
+      - NGINX_PROXY_SOURCES_PATH=/etc/nginx/dynamic/trusted-proxy-sources.conf
+      - NGINX_ORIGIN_ALLOWLIST_PATH=/etc/nginx/dynamic/origin-allowlist.conf
+      - NGINX_RELOAD_SIGNAL_PATH=/signal/nginx.reload
+    depends_on:
+      cfmock:
+        condition: service_healthy
+    command:
+      - edge-trust
+      - --debug
+      - --daemon
+      - --interval=10s
+      - run
+    restart: unless-stopped
+
+volumes:
+  nginx-dynamic:
+  nginx-signal:
