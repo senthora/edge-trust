@@ -22,6 +22,35 @@ On each update cycle it:
 If an update fails, the last known good state and generated configuration
 are preserved until the next successful reconciliation cycle.
 
+## Usage
+
+### Commands
+
+| Command       | Description               |
+|---------------|---------------------------|
+| `run`         | Run update reconciliation |
+| `healthcheck` | Validate daemon heartbeat |
+
+### Flags
+
+| Flag            | Description                        | Default |
+|-----------------|------------------------------------|---------|
+| `--daemon`      | Run continuously instead of once   | `false` |
+| `--interval`    | Interval between update checks     | `12h`   |
+| `--hb-interval` | Interval between heartbeat updates | `1s`    |
+| `--debug`       | Enable debug logging               | `false` |
+
+### Environment Variables
+
+| Variable                      | Description                       |
+|-------------------------------|-----------------------------------|
+| `CF_API_URL`                  | Cloudflare IP ranges endpoint     |
+| `NGINX_PROXY_SOURCES_PATH`    | Trusted proxy sources output path |
+| `NGINX_ORIGIN_ALLOWLIST_PATH` | Origin allowlist output path      |
+| `NGINX_RELOAD_SIGNAL_PATH`    | Nginx reload signal file path     |
+| `STATE_JSON_PATH`             | State file path                   |
+| `HEALTH_SIGNAL_PATH`          | Heartbeat signal file path        |
+
 ## Development
 
 ### Requirements
@@ -101,34 +130,3 @@ set_real_ip_from 2400:4870::/32;
 set_real_ip_from 2400:9d60::/32;
 set_real_ip_from 40.87.245.0/24;
 ```
-
-Here are examples:
-
-## Usage
-
-### Commands
-
-| Command       | Description               |
-|---------------|---------------------------|
-| `run`         | Run update reconciliation |
-| `healthcheck` | Validate daemon heartbeat |
-
-### Flags
-
-| Flag            | Description                        | Default |
-|-----------------|------------------------------------|---------|
-| `--daemon`      | Run continuously instead of once   | `false` |
-| `--interval`    | Interval between update checks     | `12h`   |
-| `--hb-interval` | Interval between heartbeat updates | `1s`    |
-| `--debug`       | Enable debug logging               | `false` |
-
-### Environment Variables
-
-| Variable                      | Description                       |
-|-------------------------------|-----------------------------------|
-| `CF_API_URL`                  | Cloudflare IP ranges endpoint     |
-| `NGINX_PROXY_SOURCES_PATH`    | Trusted proxy sources output path |
-| `NGINX_ORIGIN_ALLOWLIST_PATH` | Origin allowlist output path      |
-| `NGINX_RELOAD_SIGNAL_PATH`    | Nginx reload signal file path     |
-| `STATE_JSON_PATH`             | State file path                   |
-| `HEALTH_SIGNAL_PATH`          | Heartbeat signal file path        |
