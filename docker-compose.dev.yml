@@ -6,3 +6,9 @@ services:
       - --daemon
       - --interval=10s
       - run
+    healthcheck:
+      test: [ "CMD", "edge-trust", "healthcheck" ]
+      start_period: 2s
+      interval: 10s
+      timeout: 3s
+      retries: 3
