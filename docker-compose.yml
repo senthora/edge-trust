@@ -30,7 +30,8 @@ services:
     depends_on:
       cfmock:
         condition: service_healthy
-    command: ["tail", "-f", "/dev/null"]
+    command: ["sleep", "infinity"]
+    stop_grace_period: 1s
     restart: unless-stopped
 
 volumes:
