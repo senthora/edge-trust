@@ -2,11 +2,17 @@
 clean:
     rm -rf bin/*
 
-# Build project binaries
-build:
-    mkdir -p bin
-    just build-target bin/edge-trust ./cmd/edge-trust
-    just build-target bin/cfmock ./cmd/cfmock
+[arg("target", pattern="all|edge-trust|cfmock")]
+build target="all":
+    @mkdir -p bin
+    @if [ "{{target}}" = "all" ]; then \
+        just build-target bin/edge-trust ./cmd/edge-trust; \
+        just build-target bin/cfmock ./cmd/cfmock; \
+    elif [ "{{target}}" = "edge-trust" ]; then \
+        just build-target bin/edge-trust ./cmd/edge-trust; \
+    elif [ "{{target}}" = "cfmock" ]; then \
+        just build-target bin/cfmock ./cmd/cfmock; \
+    fi
 
 # Run Go tests
 test *args:
