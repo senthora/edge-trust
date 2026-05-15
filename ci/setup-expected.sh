@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p ci/expected
+mkdir -p tmp/ci/expected
 
 IFS=',' read -ra IPV4 <<< "${IPV4_CIDRS}"
 IFS=',' read -ra IPV6 <<< "${IPV6_CIDRS}"
@@ -13,7 +13,7 @@ generate_trusted_proxies() {
     for cidr in "${ALL_CIDRS[@]}"; do
       echo "set_real_ip_from ${cidr};"
     done
-  } > ci/expected/trusted-proxy-sources.conf
+  } > tmp/ci/expected/trusted-proxy-sources.conf
 }
 
 generate_origin_allowlist() {
@@ -21,7 +21,7 @@ generate_origin_allowlist() {
     for cidr in "${ALL_CIDRS[@]}"; do
       echo "${cidr} 1;"
     done
-  } > ci/expected/origin-allowlist.conf
+  } > tmp/ci/expected/origin-allowlist.conf
 }
 
 generate_state() {
@@ -36,7 +36,7 @@ generate_state() {
       cidrs: $cidrs,
       hash: $hash
     }' \
-    > ci/expected/state.json
+    > tmp/ci/expected/state.json
 }
 
 generate_trusted_proxies

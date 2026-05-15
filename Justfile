@@ -20,6 +20,10 @@ inspect:
     @echo '=== State ==='
     @just show-state
 
+# Run edge-trust command inside compose container
+edge-trust *args:
+    @just run-edge-trust {{args}}
+
 # Run cfmock command inside compose container
 [arg("command", help="cfmock command to run")]
 cfmock command:

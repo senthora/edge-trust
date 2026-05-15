@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p ci/actual
+mkdir -p tmp/ci/actual
 
 compare_config() {
   local container_path="$1"
@@ -38,29 +38,41 @@ compare_state() {
     <(jq -c 'del(.written_at)' "${actual_path}")
 
   echo " ✔ Verified state: ${container_path}"
+  echo
+}
+
+compare_signal() {
+  local container_path="$1"
+  local actual_path="$2"
+
+  echo "Verifying signal: ${container_path}"
+
+  if ! docker compose cp \
+    "edge-trust:${container_path}" \
+    "${actual_path}" >/dev/null 2>&1; then
+    echo "ERROR: Missing signal file: ${container_path}"
+    exit 1
+  fi
+
+  echo " ✔ Verified signal: ${container_path}"
+  echo
 }
 
 compare_config \
   /etc/nginx/dynamic/trusted-proxy-sources.conf \
-  ci/expected/trusted-proxy-sources.conf \
-  ci/actual/trusted-proxy-sources.conf
+  tmp/ci/expected/trusted-proxy-sources.conf \
+  tmp/ci/actual/trusted-proxy-sources.conf
 
 compare_config \
   /etc/nginx/dynamic/origin-allowlist.conf \
-  ci/expected/origin-allowlist.conf \
-  ci/actual/origin-allowlist.conf
+  tmp/ci/expected/origin-allowlist.conf \
+  tmp/ci/actual/origin-allowlist.conf
 
 compare_state \
   /var/lib/edge-trust/state.json \
-  ci/expected/state.json \
-  ci/actual/state.json
+  tmp/ci/expected/state.json \
+  tmp/ci/actual/state.json
 
-docker compose exec -T edge-trust \
-  sh -ceu '
-    test -f /signal/nginx.reload || {
-      echo "ERROR: Missing nginx reload signal: /signal/nginx.reload"
-      exit 1
-    }
-  '
-
-echo " ✔ Verified nginx reload signal"
+compare_signal \
+  /signal/nginx.reload \
+  tmp/ci/actual/nginx.reload

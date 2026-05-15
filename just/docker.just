@@ -22,8 +22,8 @@ compose-logs *args:
     @-just compose logs {{args}}
 
 [private]
-exec-edge-trust-cmd command:
-    @just compose exec edge-trust sh -ceu "'{{command}}'"
+run-edge-trust *args:
+    @just compose run --rm edge-trust {{args}}
 
 [private]
 exec-cfmock *args:

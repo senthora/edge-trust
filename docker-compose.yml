@@ -18,8 +18,9 @@ services:
     image: senthora/edge-trust:dev
     container_name: edge-trust
     volumes:
-      - nginx-dynamic:/etc/nginx/dynamic:rw
       - nginx-signal:/signal:rw
+      - nginx-dynamic:/etc/nginx/dynamic:rw
+      - trust-state:/var/lib/edge-trust:rw
     # noinspection HttpUrlsUsage
     environment:
       - CF_API_URL=http://cfmock/client/v4/ips
@@ -30,10 +31,8 @@ services:
     depends_on:
       cfmock:
         condition: service_healthy
-    command: ["sleep", "infinity"]
-    stop_grace_period: 1s
-    restart: unless-stopped
 
 volumes:
-  nginx-dynamic:
   nginx-signal:
+  nginx-dynamic:
+  trust-state:
