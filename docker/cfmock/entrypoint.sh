@@ -1,5 +1,5 @@
 #!/bin/sh
 
-mockcfctl set
+cfmock set
 
 exec nginx -g 'daemon off;'
