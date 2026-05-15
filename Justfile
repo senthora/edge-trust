@@ -47,14 +47,14 @@ set-etag *args:
 # Print generated trusted proxy config
 show-trusted-proxies:
     @just exec-edge-trust-cmd \
-    cat /etc/nginx/dynamic/trusted-proxy-sources.conf
+    'cat /etc/nginx/dynamic/trusted-proxy-sources.conf'
 
 # Print generated origin allowlist config
 show-origin-allowlist:
     @just exec-edge-trust-cmd \
-    cat /etc/nginx/dynamic/origin-allowlist.conf
+    'cat /etc/nginx/dynamic/origin-allowlist.conf'
 
 # Print persisted reconciliation state
 show-state:
     @just exec-edge-trust-cmd \
-    cat /var/lib/edge-trust/state.json
+    'cat /var/lib/edge-trust/state.json'
