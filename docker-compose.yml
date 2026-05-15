@@ -8,8 +8,9 @@ services:
     tmpfs:
       - /usr/share/nginx/html
     environment:
-      IPV4_CIDRS: ${IPV4_CIDRS:-}
-      IPV6_CIDRS: ${IPV6_CIDRS:-}
+      IPV4_CIDRS: ${IPV4_CIDRS:-199.27.128.0/21}
+      IPV6_CIDRS: ${IPV6_CIDRS:-2400:cb00::/32}
+      ETAG: ${ETAG:-a8e453d9d129a3769407127936edfdb0}
     restart: unless-stopped
 
   edge-trust:
