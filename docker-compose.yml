@@ -29,12 +29,7 @@ services:
     depends_on:
       cfmock:
         condition: service_healthy
-    command:
-      - edge-trust
-      - --debug
-      - --daemon
-      - --interval=10s
-      - run
+    command: ["tail", "-f", "/dev/null"]
     restart: unless-stopped
 
 volumes:

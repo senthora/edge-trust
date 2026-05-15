@@ -1,0 +1,8 @@
+services:
+  edge-trust:
+    command:
+      - edge-trust
+      - --debug
+      - --daemon
+      - --interval=10s
+      - run
