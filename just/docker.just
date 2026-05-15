@@ -26,8 +26,8 @@ exec-edge-trust-cmd command:
     @just compose exec edge-trust sh -ceu "'{{command}}'"
 
 [private]
-exec-cfmock-cmd command:
-    @just compose exec cfmock sh -ceu "'{{command}}'"
+exec-cfmock *args:
+    @just compose exec cfmock cfmock {{args}}
 
 [private]
 compose *args:
