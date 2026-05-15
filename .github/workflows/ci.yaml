@@ -64,11 +64,14 @@ jobs:
       - name: Build go project
         run: just build
 
-      - name: Start compose stack
-        run: docker compose up -d --build
+      - name: Build compose stack
+        run: docker compose build
+
+      - name: Start cfmock service
+        run: docker compose up -d cfmock --wait
 
       - name: Run edge-trust
-        run: docker compose run --rm edge-trust --debug run
+        run: docker compose run --rm --no-deps edge-trust --debug run
 
       - name: Setup expected results
         run: ./ci/setup-expected.sh
