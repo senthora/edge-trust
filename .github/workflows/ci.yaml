@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, dev ]
+    paths:
+      - 'cmd/**'
+      - 'internal/**'
+      - 'docker/**'
+      - 'just/**'
+      - '.github/workflows/**'
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - 'go.mod'
+      - 'go.sum'
+      - 'Justfile'
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+
+      - name: Install just
+        uses: extractions/setup-just@v4
+
+      - name: Run unit tests
+        run: just test
+
+  integration:
+    name: Integration
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+
+      - name: Install just
+        uses: extractions/setup-just@v4
+
+      - name: Start compose stack
+        run: just compose-up
+
+      - name: Inspect generated artifacts
+        run: just inspect
+
+      - name: Print compose logs
+        if: always()
+        run: just compose-logs --tail=500 --no-color || true
+
+      - name: Shutdown compose stack
+        if: always()
+        run: just compose-down
