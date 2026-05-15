@@ -47,6 +47,7 @@ jobs:
       IPV4_CIDRS: 173.245.48.0/20,103.21.244.0/22,198.41.128.0/17
       IPV6_CIDRS: 2400:cb00::/32,2606:4700::/32,2803:f800::/32
       ETAG: 7f4c2d91e6ab3f0c58d2a4b9f1e7c635
+      HASH: sha256:4e25067cfc8579af9fd81c407bae411d1c6db84de3dd14f32647a3a560d4ea27
 
     steps:
       - name: Checkout repository
