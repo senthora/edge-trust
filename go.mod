@@ -1,6 +1,6 @@
 module senthora.com/edge-trust
 
-go 1.26.3
+go 1.25
 
 require go.uber.org/zap v1.28.0
 
