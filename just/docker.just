@@ -21,22 +21,6 @@ compose-restart:
 compose-logs *args:
     @-docker compose logs {{args}}
 
-# Open interactive shell inside edge-trust container
-exec-edge-trust-it:
-    @docker compose exec -it edge-trust sh
-
-# Execute commands inside edge-trust container
-exec-edge-trust-cmd +args:
-    @docker compose exec edge-trust sh -ceu '{{args}}'
-
-# Open interactive shell inside cfmock container
-exec-cfmock-it:
-    @docker compose exec -it cfmock sh
-
-# Execute commands inside cfmock container
-exec-cfmock-cmd +args:
-    @docker compose exec cfmock sh -ceu '{{args}}'
-
 # Randomize mock Cloudflare CIDRs
 randomize-cidrs:
     @just exec-cfmock-cmd cfmock random
@@ -75,3 +59,19 @@ show-origin-allowlist:
 show-state:
     @just exec-edge-trust-cmd \
     cat /var/lib/edge-trust/state.json
+
+[private]
+exec-edge-trust-it:
+    @docker compose exec -it edge-trust sh
+
+[private]
+exec-edge-trust-cmd +args:
+    @docker compose exec edge-trust sh -ceu '{{args}}'
+
+[private]
+exec-cfmock-it:
+    @docker compose exec -it cfmock sh
+
+[private]
+exec-cfmock-cmd +args:
+    @docker compose exec cfmock sh -ceu '{{args}}'
