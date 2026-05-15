@@ -7,6 +7,9 @@ services:
     image: senthora/cfmock:dev
     tmpfs:
       - /usr/share/nginx/html
+    environment:
+      IPV4_CIDRS: ${IPV4_CIDRS:-}
+      IPV6_CIDRS: ${IPV6_CIDRS:-}
     restart: unless-stopped
 
   edge-trust:
