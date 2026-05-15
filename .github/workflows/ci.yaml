@@ -64,4 +64,4 @@ jobs:
 
       - name: Shutdown compose stack
         if: always()
-        run: just compose-down
+        run: docker compose down -v --remove-orphans
