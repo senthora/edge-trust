@@ -3,3 +3,7 @@ bin/
 
 # IDEA
 /.idea
+
+# CI
+ci/actual
+ci/expected

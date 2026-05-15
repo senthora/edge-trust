@@ -40,6 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
 
+    env:
+      IPV4_CIDRS: 173.245.48.0/20,103.21.244.0/22,198.41.128.0/17
+      IPV6_CIDRS: 2400:cb00::/32,2606:4700::/32,2803:f800::/32
+      ETAG: 7f4c2d91e6ab3f0c58d2a4b9f1e7c635
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -53,10 +58,16 @@ jobs:
         uses: extractions/setup-just@v4
 
       - name: Start compose stack
-        run: just compose-up
+        run: docker compose up -d --build
 
-      - name: Inspect generated artifacts
-        run: just inspect
+      - name: Run edge-trust
+        run: docker compose exec -T edge-trust edge-trust --debug run
+
+      - name: Setup expected results
+        run: ./ci/setup-expected.sh
+
+      - name: Verify actual results
+        run: ./ci/verify-actual.sh
 
       - name: Print compose logs
         if: always()
