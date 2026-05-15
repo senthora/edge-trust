@@ -68,7 +68,7 @@ jobs:
         run: docker compose up -d --build
 
       - name: Run edge-trust
-        run: docker compose exec -T edge-trust edge-trust --debug run
+        run: docker compose run --rm edge-trust --debug run
 
       - name: Setup expected results
         run: ./ci/setup-expected.sh
