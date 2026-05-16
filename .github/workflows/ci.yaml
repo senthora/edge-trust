@@ -61,6 +61,9 @@ jobs:
       - name: Install just
         uses: extractions/setup-just@v4
 
+      - name: Pull busybox image
+        run: docker pull busybox:1.37.0
+
       - name: Build go project
         run: just build
 
@@ -73,11 +76,8 @@ jobs:
       - name: Run edge-trust
         run: docker compose run --rm --no-deps edge-trust --debug run
 
-      - name: Setup expected results
-        run: ./ci/setup-expected.sh
-
-      - name: Verify actual results
-        run: ./ci/verify-actual.sh
+      - name: Run integration tests
+        run: docker compose run --rm itest
 
       - name: Print compose logs
         if: always()
