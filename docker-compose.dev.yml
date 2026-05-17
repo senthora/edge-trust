@@ -1,4 +1,7 @@
 services:
+  cfmock:
+    ports:
+      - "80:80"
   edge-trust:
     command:
       - --debug
