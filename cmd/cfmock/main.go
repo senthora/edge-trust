@@ -22,7 +22,7 @@ func main() {
 		_, _ = fmt.Fprintf(os.Stderr, "unknown command: %q\n", rawCommand)
 		os.Exit(1)
 	}
-	fmt.Printf("starting mockcfctl with command: %s\n", command.Name)
+	fmt.Printf("starting cfmock with command: %s\n", command.Name)
 	command.Handler()
 }
 
