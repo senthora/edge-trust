@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: docker/cfmock/Dockerfile
     container_name: cfmock
-    image: senthora/edge-trust-cfmock
+    image: senthora/cfmock:dev
     tmpfs:
       - /usr/share/nginx/html
     environment:
