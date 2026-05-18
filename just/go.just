@@ -1,18 +1,17 @@
 # Delete compiled binaries
 clean:
-    rm -rf bin/*
+    @rm -rf bin/*
 
-[arg("target", pattern="all|edge-trust|cfmock")]
-build target="all":
-    @mkdir -p bin
-    @if [ "{{target}}" = "all" ]; then \
-        just build-target bin/edge-trust ./cmd/edge-trust; \
-        just build-target bin/cfmock ./cmd/cfmock; \
-    elif [ "{{target}}" = "edge-trust" ]; then \
-        just build-target bin/edge-trust ./cmd/edge-trust; \
-    elif [ "{{target}}" = "cfmock" ]; then \
-        just build-target bin/cfmock ./cmd/cfmock; \
-    fi
+# Build all binaries
+build: build-edge-trust build-cfmock
+
+# Build edge-trust binary
+build-edge-trust:
+    just build-target bin/edge-trust ./cmd/edge-trust
+
+# Build cfmock binary
+build-cfmock:
+    just build-target bin/cfmock ./cmd/cfmock
 
 # Run Go tests
 test *args:
@@ -20,5 +19,6 @@ test *args:
 
 [private]
 build-target output target:
+    @mkdir -p bin
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -ldflags="-s -w" -o {{output}} {{target}}
