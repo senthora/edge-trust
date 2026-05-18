@@ -1,5 +1,11 @@
 # Edge Trust
 
+[![CI](https://github.com/senthora/edge-trust/actions/workflows/ci.yaml/badge.svg)](https://github.com/senthora/edge-trust/actions/workflows/ci.yaml)
+[![codecov](https://codecov.io/github/senthora/edge-trust/graph/badge.svg)](https://codecov.io/github/senthora/edge-trust)
+[![Release](https://img.shields.io/github/v/release/senthora/edge-trust)](https://github.com/senthora/edge-trust/releases)
+[![Docker Hub](https://img.shields.io/badge/docker-hub-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/senthora/edge-trust)
+[![License](https://img.shields.io/github/license/senthora/edge-trust)](LICENSE)
+
 Edge Trust helps protect infrastructure running
 behind Cloudflare by managing nginx trust configuration.
 
