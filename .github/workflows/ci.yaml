@@ -61,9 +61,6 @@ jobs:
       - name: Install just
         uses: extractions/setup-just@v4
 
-      - name: Pull busybox image
-        run: docker pull busybox:1.37.0
-
       - name: Build go project
         run: just build
 
