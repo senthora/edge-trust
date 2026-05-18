@@ -76,4 +76,4 @@ All other endpoints return `404`.
 ```
 
 For full documentation read the CFMock
-[README](https://github.com/senthora/edge-trust/blob/dev/cmd/cfmock/README.md).
+[README](https://github.com/senthora/edge-trust/blob/master/cmd/cfmock/README.md).

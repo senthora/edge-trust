@@ -71,4 +71,4 @@ Generated nginx configuration files will be written to:
 /etc/nginx/dynamic
 ```
 
-For full documentation read Edge Trust [README](https://github.com/senthora/edge-trust/blob/dev/README.md).
+For full documentation read Edge Trust [README](https://github.com/senthora/edge-trust/blob/master/README.md).
