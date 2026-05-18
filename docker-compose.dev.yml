@@ -25,3 +25,4 @@ services:
       - nginx-dynamic:/etc/nginx/dynamic:ro
       - trust-state:/var/lib/edge-trust:ro
     command: sleep 365d
+    stop_grace_period: 1s
