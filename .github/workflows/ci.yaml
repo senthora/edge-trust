@@ -69,13 +69,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build integration test image
-        uses: docker/build-push-action@v7
-        with:
-          context: docker/itest
-          tags: senthora/edge-trust-itest
-          load: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+        run: docker compose build itest
 
       - name: Start cfmock service
         run: docker compose up -d cfmock --wait

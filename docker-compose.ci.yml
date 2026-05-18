@@ -1,5 +1,6 @@
 services:
   itest:
+    build: docker/itest
     image: senthora/edge-trust-itest
     environment:
       IPV4_CIDRS: ${IPV4_CIDRS:-}
