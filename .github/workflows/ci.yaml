@@ -74,6 +74,7 @@ jobs:
         if: steps.test-check.outputs.run == 'true'
         uses: codecov/codecov-action@v6
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: build/coverage/coverage.out
           fail_ci_if_error: true
 
