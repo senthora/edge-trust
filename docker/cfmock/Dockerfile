@@ -1,6 +1,6 @@
 FROM nginx:1.31.0-alpine3.23-slim
 
-COPY bin/cfmock /usr/local/bin/cfmock
+COPY build/bin/cfmock /usr/local/bin/cfmock
 
 COPY docker/cfmock/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/cfmock/entrypoint.sh /entrypoint.sh

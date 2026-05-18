@@ -2,7 +2,7 @@
   <configuration default="false" name="cfmock" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="edge-trust" />
     <working_directory value="$PROJECT_DIR$" />
-    <go_parameters value="-o ../../bin/cfmock" />
+    <go_parameters value="-o ../../build/bin/cfmock" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
       <option name="IS_SUBST" value="false" />
