@@ -1,14 +1,10 @@
 services:
   cfmock:
-    build:
-      context: .
-      dockerfile: docker/cfmock/Dockerfile
     container_name: cfmock
     ports:
       - "80:80"
 
   edge-trust:
-    build: .
     container_name: edge-trust
     command:
       - --debug

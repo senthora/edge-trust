@@ -1,5 +1,8 @@
 services:
   cfmock:
+    build:
+      context: .
+      dockerfile: docker/cfmock/Dockerfile
     image: senthora/cfmock:dev
     tmpfs:
       - /usr/share/nginx/html
@@ -10,6 +13,7 @@ services:
     restart: unless-stopped
 
   edge-trust:
+    build: .
     image: senthora/edge-trust:dev
     volumes:
       - nginx-signal:/signal:rw
