@@ -46,6 +46,7 @@ jobs:
         run: just build
 
       - name: Detect Go code changes
+        if: github.event_name != 'workflow_dispatch'
         id: go-changes
         uses: dorny/paths-filter@v4
         with:
@@ -59,12 +60,14 @@ jobs:
       - name: Resolve test execution
         id: test-check
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" || \
-                "${{ steps.go-changes.outputs.go }}" == "true" ]]; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=false" >> "$GITHUB_OUTPUT"
+          run=false
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+          run=true
           fi
+          if [[ "${{ steps.go-changes.outputs.go || 'false' }}" == "true" ]]; then
+          run=true
+          fi
+          echo "run=$run" >> "$GITHUB_OUTPUT"
 
       - name: Run unit tests with coverage
         if: steps.test-check.outputs.run == 'true'
