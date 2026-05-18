@@ -16,7 +16,7 @@ build target="all":
 
 # Run Go tests
 test *args:
-    go test {{args}} ./...
+    go test -count=1 {{args}} ./...
 
 [private]
 build-target output target:
