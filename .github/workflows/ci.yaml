@@ -4,16 +4,18 @@ on:
   push:
     branches: [ master, dev ]
     paths:
+      - '.github/workflows/**'
       - 'cmd/**'
       - 'internal/**'
-      - 'docker/**'
-      - 'just/**'
-      - '.github/workflows/**'
-      - 'Dockerfile'
-      - 'docker-compose.yml'
       - 'go.mod'
       - 'go.sum'
+      - 'just/**'
       - 'Justfile'
+      - 'docker/**'
+      - 'Dockerfile'
+      - '.dockerignore'
+      - 'docker-compose.yml'
+      - 'docker-compose.ci.yml'
 
 jobs:
   test:
