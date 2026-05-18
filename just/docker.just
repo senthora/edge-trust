@@ -5,9 +5,9 @@ compose-build *args: build
     just compose build {{args}}
 
 # Start local compose stack
-compose-up:
+compose-up *args:
     just compose build
-    just compose up -d
+    just compose up -d {{args}}
 
 # Stop stack and remove volumes/orphans
 compose-down:
