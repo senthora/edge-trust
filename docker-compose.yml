@@ -1,0 +1,36 @@
+services:
+  cfmock:
+    build:
+      context: .
+      dockerfile: docker/cfmock/Dockerfile
+    image: senthora/cfmock:dev
+    tmpfs:
+      - /usr/share/nginx/html
+    environment:
+      IPV4_CIDRS: ${IPV4_CIDRS:-199.27.128.0/21}
+      IPV6_CIDRS: ${IPV6_CIDRS:-2400:cb00::/32}
+      ETAG: ${ETAG:-a8e453d9d129a3769407127936edfdb0}
+    restart: unless-stopped
+
+  edge-trust:
+    build: .
+    image: senthora/edge-trust:dev
+    volumes:
+      - nginx-signal:/signal:rw
+      - nginx-dynamic:/etc/nginx/dynamic:rw
+      - trust-state:/var/lib/edge-trust:rw
+    # noinspection HttpUrlsUsage
+    environment:
+      - CF_API_URL=http://cfmock/client/v4/ips
+      - STATE_JSON_PATH=/var/lib/edge-trust/state.json
+      - NGINX_PROXY_SOURCES_PATH=/etc/nginx/dynamic/trusted-proxy-sources.conf
+      - NGINX_ORIGIN_ALLOWLIST_PATH=/etc/nginx/dynamic/origin-allowlist.conf
+      - NGINX_RELOAD_SIGNAL_PATH=/signal/nginx.reload
+    depends_on:
+      cfmock:
+        condition: service_healthy
+
+volumes:
+  nginx-signal:
+  nginx-dynamic:
+  trust-state:

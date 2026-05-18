@@ -1,0 +1,28 @@
+services:
+  cfmock:
+    container_name: cfmock
+    ports:
+      - "80:80"
+
+  edge-trust:
+    container_name: edge-trust
+    command:
+      - --debug
+      - --daemon
+      - --interval=10s
+      - run
+    healthcheck:
+      test: [ "CMD", "edge-trust", "healthcheck" ]
+      start_period: 2s
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  inspect:
+    image: busybox:1.37.0
+    container_name: edge-trust-inspect
+    volumes:
+      - nginx-dynamic:/etc/nginx/dynamic:ro
+      - trust-state:/var/lib/edge-trust:ro
+    command: sleep 365d
+    stop_grace_period: 1s
