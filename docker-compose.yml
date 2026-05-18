@@ -1,9 +1,5 @@
 services:
   cfmock:
-    build:
-      context: .
-      dockerfile: docker/cfmock/Dockerfile
-    container_name: cfmock
     image: senthora/cfmock:dev
     tmpfs:
       - /usr/share/nginx/html
@@ -28,9 +24,7 @@ services:
     command: itest.sh
 
   edge-trust:
-    build: .
     image: senthora/edge-trust:dev
-    container_name: edge-trust
     volumes:
       - nginx-signal:/signal:rw
       - nginx-dynamic:/etc/nginx/dynamic:rw

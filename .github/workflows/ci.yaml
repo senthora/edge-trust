@@ -61,11 +61,40 @@ jobs:
       - name: Install just
         uses: extractions/setup-just@v4
 
-      - name: Build go project
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build Go binaries
         run: just build
 
-      - name: Build compose stack
-        run: docker compose build
+      - name: Build edge-trust image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: Dockerfile
+          tags: senthora/edge-trust:dev
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build cfmock image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/cfmock/Dockerfile
+          tags: senthora/cfmock:dev
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build integration test image
+        uses: docker/build-push-action@v7
+        with:
+          context: docker/itest
+          tags: senthora/edge-trust-itest
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Start cfmock service
         run: docker compose up -d cfmock --wait
