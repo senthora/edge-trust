@@ -17,6 +17,7 @@ on:
       - '.dockerignore'
       - 'docker-compose.yml'
       - 'docker-compose.ci.yml'
+      - '!**/*.md'
 
 jobs:
   test:
