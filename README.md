@@ -1,26 +1,98 @@
 # Edge Trust
 
-Edge Trust keeps nginx trust configuration in sync with Cloudflare
-IP ranges to help protect dark origin infrastructure behind Cloudflare.
+Edge Trust helps protect infrastructure running
+behind Cloudflare by managing nginx trust configuration.
 
-## Overview
+## Why do I need this?
 
-It periodically fetches Cloudflare IP ranges and keeps 
-nginx trust configuration synchronized with the latest published CIDRs.
+When running infrastructure behind Cloudflare, origin servers 
+are expected to only accept traffic forwarded by Cloudflare proxies.
 
-On each update cycle it:
+If origin servers remain publicly reachable without additional restrictions,
+attackers can bypass Cloudflare entirely and connect directly to the origin.
+This can expose services to attacks, origin IP discovery,
+and traffic that bypasses Cloudflare security controls.
 
-- fetches Cloudflare IPv4 and IPv6 ranges
-- validates and normalizes CIDRs
-- compares the fetched ETag against persisted state
-- skips regeneration if nothing changed
-- generates nginx trust configuration files
-- atomically writes updated configuration artifacts
-- persists canonical synchronization state
-- emits a filesystem reload signal for nginx
+Edge Trust helps maintain a "dark origin" setup by continuously synchronizing
+nginx trust configuration with the latest published Cloudflare IP ranges.
 
-If an update fails, the last known good state and generated configuration
-are preserved until the next successful reconciliation cycle.
+This allows nginx to:
+
+- trust real client IP headers only from Cloudflare proxies
+- restrict direct origin access to Cloudflare networks
+- automatically stay up to date as Cloudflare IP ranges change
+
+## How does it work?
+
+Edge Trust periodically fetches Cloudflare IP ranges and regenerates nginx
+trust configuration when changes are detected. Generated configuration files 
+are then written to a shared volume and a reload signal file is created for nginx.
+
+Your nginx container is expected to:
+
+- mount the generated configuration volume
+- include generated configuration files
+- watch for reload signal files
+- reload nginx when signals appear
+
+Edge Trust does not reload nginx directly.
+
+## Quick Start
+
+Define Edge Trust as a docker compose service:
+
+```yaml
+edge-trust:
+  image: senthora/edge-trust:latest
+  volumes:
+    - nginx-dynamic:/etc/nginx/dynamic
+    - trust-state:/var/lib/edge-trust
+    - nginx-signal:/signal
+  environment:
+    CF_API_URL: https://api.cloudflare.com/client/v4/ips
+    STATE_JSON_PATH: /var/lib/edge-trust/state.json
+    NGINX_PROXY_SOURCES_PATH: /etc/nginx/dynamic/trusted-proxy-sources.conf
+    NGINX_ORIGIN_ALLOWLIST_PATH: /etc/nginx/dynamic/origin-allowlist.conf
+    NGINX_RELOAD_SIGNAL_PATH: /signal/nginx.reload
+
+volumes:
+  nginx-dynamic:
+  trust-state:
+  nginx-signal:
+```
+
+Then run the binary inside the container:
+
+```shell
+docker compose run --rm edge-trust run
+```
+
+Generated nginx configuration files will be written to:
+
+```text
+/etc/nginx/dynamic
+```
+
+Edge Trust can also be run in daemon mode:
+
+```yaml
+services:
+  edge-trust:
+    image: senthora/edge-trust:latest
+    command:
+      - --daemon
+      - --interval=4h
+      - run
+    healthcheck:
+      test: ["CMD", "edge-trust", "healthcheck"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+```
+
+This keeps Edge Trust running continuously 
+and checks for Cloudflare IP range updates every 4 hours.
 
 ## Usage
 
@@ -62,14 +134,21 @@ are preserved until the next successful reconciliation cycle.
 
 ### Quick Start
 
-```bash
-# build and start dev stack:
+Build and start development stack:
+
+```shell
 just compose-up
+```
 
-# inspect generated files:
+Inspect generated configuration and state:
+
+```shell
 just inspect
+```
 
-# tear down dev stack
+Stop development stack:
+
+```shell
 just compose-down
 ```
 
@@ -77,22 +156,30 @@ just compose-down
 
 Run unit tests:
 
-```bash
+```shell
 just test
 ```
 
-Start dev stack and modify mock Cloudflare API responses:
+Manually modify response and inspect result:
 
-```bash
+```shell
 just compose-up
 just randomize-cidrs
 just set-etag <sample-etag>
+just inspect
 ```
 
-Inspect generated configuration files and persisted state:
+Run integration tests locally:
 
-```bash
-just inspect
+```shell
+export IPV4_CIDRS=103.21.244.0/22 \
+  IPV6_CIDRS=2400:cb00::/32 \
+  ETAG=7f4c2d91e6ab3f0c58d2a4b9f1e7c635 \
+  HASH=sha256:4e25067cfc8579af9fd81c407bae411d1c6db84de3dd14f32647a3a560d4ea27
+
+docker compose up -d cfmock --wait
+docker compose run --rm --no-deps edge-trust --debug run
+docker compose run --rm itest
 ```
 
 ## Nginx Configuration
@@ -130,3 +217,7 @@ set_real_ip_from 2400:4870::/32;
 set_real_ip_from 2400:9d60::/32;
 set_real_ip_from 40.87.245.0/24;
 ```
+
+## License
+
+This project is licensed under MIT License.
