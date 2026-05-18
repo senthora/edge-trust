@@ -33,7 +33,7 @@ jobs:
         uses: extractions/setup-just@v4
 
       - name: Build edge-trust
-        run: just build edge-trust
+        run: just build-edge-trust
 
       - name: Run unit tests
         run: just test
