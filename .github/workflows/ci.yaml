@@ -66,9 +66,16 @@ jobs:
             echo "run=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Run unit tests
+      - name: Run unit tests with coverage
         if: steps.test-check.outputs.run == 'true'
-        run: just test
+        run: just test-coverage
+
+      - name: Upload coverage reports to Codecov
+        if: steps.test-check.outputs.run == 'true'
+        uses: codecov/codecov-action@v6
+        with:
+          files: build/coverage/coverage.out
+          fail_ci_if_error: true
 
       - name: Build docker images
         run: docker compose build
