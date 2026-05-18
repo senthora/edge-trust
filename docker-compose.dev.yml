@@ -14,3 +14,11 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
+
+  inspect:
+    image: busybox:1.37.0
+    container_name: edge-trust-inspect
+    volumes:
+      - nginx-dynamic:/etc/nginx/dynamic:ro
+      - trust-state:/var/lib/edge-trust:ro
+    command: sleep 365d
