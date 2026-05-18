@@ -94,6 +94,8 @@ services:
 This keeps Edge Trust running continuously 
 and checks for Cloudflare IP range updates every 4 hours.
 
+Read more about how to setup CFMock [here](https://github.com/senthora/edge-trust/blob/dev/cmd/cfmock/README.md).
+
 ## Usage
 
 ### Commands
