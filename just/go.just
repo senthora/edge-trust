@@ -17,6 +17,21 @@ build-cfmock:
 test *args:
     go test -count=1 {{args}} ./...
 
+# Run Go tests with coverage
+test-coverage:
+    @mkdir -p build/coverage
+    go test \
+      -count=1 \
+      -coverprofile=build/coverage/coverage.out \
+      `go list ./... | grep -Ev '/cmd/cfmock|/testutil'`
+
+    go tool cover -html=build/coverage/coverage.out \
+      -o build/coverage/coverage.html
+
+# Print test coverage report
+print-coverage:
+    go tool cover -func=build/coverage/coverage.out
+
 [private]
 build-target output target:
     @mkdir -p build/bin
