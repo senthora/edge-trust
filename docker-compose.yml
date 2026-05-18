@@ -9,20 +9,6 @@ services:
       ETAG: ${ETAG:-a8e453d9d129a3769407127936edfdb0}
     restart: unless-stopped
 
-  itest:
-    build: docker/itest
-    image: senthora/edge-trust-itest
-    environment:
-      IPV4_CIDRS: ${IPV4_CIDRS:-}
-      IPV6_CIDRS: ${IPV6_CIDRS:-}
-      ETAG: ${ETAG:-}
-      HASH: ${HASH:-}
-    volumes:
-      - nginx-dynamic:/dynamic:ro
-      - trust-state:/state:ro
-      - nginx-signal:/signal:ro
-    command: itest.sh
-
   edge-trust:
     image: senthora/edge-trust:dev
     volumes:

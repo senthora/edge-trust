@@ -1,0 +1,13 @@
+services:
+  itest:
+    image: senthora/edge-trust-itest
+    environment:
+      IPV4_CIDRS: ${IPV4_CIDRS:-}
+      IPV6_CIDRS: ${IPV6_CIDRS:-}
+      ETAG: ${ETAG:-}
+      HASH: ${HASH:-}
+    volumes:
+      - nginx-dynamic:/dynamic:ro
+      - trust-state:/state:ro
+      - nginx-signal:/signal:ro
+    command: itest.sh
