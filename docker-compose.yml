@@ -19,7 +19,6 @@ services:
       - nginx-signal:/signal:rw
       - nginx-dynamic:/etc/nginx/dynamic:rw
       - trust-state:/var/lib/edge-trust:rw
-    # noinspection HttpUrlsUsage
     environment:
       - CF_API_URL=http://cfmock/client/v4/ips
       - STATE_JSON_PATH=/var/lib/edge-trust/state.json
