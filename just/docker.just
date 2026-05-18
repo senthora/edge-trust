@@ -30,6 +30,10 @@ exec-cfmock *args:
     @just compose exec cfmock cfmock {{args}}
 
 [private]
+exec-inspect *args:
+    docker exec -it edge-trust-inspect {{args}}
+
+[private]
 compose *args:
     COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml \
     docker compose {{args}}
